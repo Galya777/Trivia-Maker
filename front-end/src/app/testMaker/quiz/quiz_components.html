@@ -1,0 +1,59 @@
+<div class="container">
+    <h2>{{ QUIZ.QUIZ_MAKER | uppercase }}</h2>
+    <form>
+      <select
+        name="categorySelect"
+        id="categorySelect"
+        [(ngModel)]="selectedCategory"
+      >
+        <option value="">{{ QUIZ.SELECT_CATEGORY_TEXT }}</option>
+        <option *ngFor="let option of CATEGORY_OPTIONS" [value]="option.id">
+          {{ option.name }}
+        </option>
+      </select>
+      <select
+        name="difficultySelect"
+        id="difficultySelect"
+        [(ngModel)]="selectedDifficulty"
+      >
+        <option value="">{{ QUIZ.SELECT_DIFFICULTY_TEXT }}</option>
+        <option *ngFor="let option of DIFFICULTY_OPTIONS" [value]="option.id">
+          {{ option.name }}
+        </option>
+      </select>
+      <button
+        id="createBtn"
+        type="button"
+        (click)="onCreate()"
+        [disabled]="!selectedCategory || !selectedDifficulty"
+      >
+        {{ QUIZ.CREATE }}
+      </button>
+    </form>
+    <div class="quiz_container">
+      <div>
+        <div *ngFor="let q of quizList; let i = index" class="quiz_row">
+          <div>{{ q.question }}</div>
+          <div class="quiz_btn">
+            <button
+              type="button"
+              *ngFor="let ans of q.all_answers"
+              btnHighlight
+              (click)="onAnswerSelect(ans, i)"
+              [ngClass]="{ selected: userAnsArr[i] === ans }"
+            >
+              {{ ans }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="submit_btn">
+        <button type="submit" *ngIf="showSubmit" (click)="onSubmit()">
+          {{ QUIZ.SUBMIT }}
+        </button>
+      </div>
+      <div>
+        <loader [loading]="loading"></loader>
+      </div>
+    </div>
+  </div>
