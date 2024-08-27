@@ -1,0 +1,265 @@
+:host {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 14px;
+    color: #12b6df;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 8px 0;
+  }
+
+  p {
+    margin: 0;
+    
+ 
+  }
+  @import url('https://fonts.googleapis.com/css?family=Libre+Caslon+Text:400,700&display=swap');
+  
+  .hamburger-icon {
+    position: absolute;
+    z-index: 1;
+    top: 1vh;
+    right: 1vw;
+    padding-bottom: 20vh;
+  }
+  
+  .hamburger-icon span {
+    height: 5px;
+    width: 40px;
+    background-color: palevioletred;
+    display: block;
+    margin: 5px 0px 5px 0px;
+    transition: 0.7s ease-in-out;
+    transform: none;
+  }
+  
+  #openmenu:checked ~ .menu-pane {
+    left: -5vw;
+    transform: translateX(-5vw);
+  }
+  
+  #openmenu:checked ~ .body-text {
+  display: none;
+  }
+  
+  #openmenu:checked ~ .hamburger-icon span:nth-of-type(2) {
+    transform: translate(0%, 175%) rotate(-45deg);
+    background-color: white;
+  }
+  
+  #openmenu:checked ~ .hamburger-icon span:nth-of-type(3) {
+    transform: rotate(45deg);
+    background-color: white;
+  }
+  
+  #openmenu:checked ~ .hamburger-icon span:nth-of-type(1) {
+    opacity: 0;
+  }
+  
+  #openmenu:checked ~ .hamburger-icon span:nth-of-type(4) {
+    opacity: 0;
+  }
+  
+  div.menu-pane {
+    background-color: palevioletred;
+    position: absolute;
+    transform: translateX(-105vw);
+    transform-origin: (1, 0);
+    width: 40vw;
+    height: 80%;
+    transition: 0.6s ease-in-out;
+  }
+  
+  .menu-pane p {
+    color: black;
+    font-size: 0.6em;
+  }
+  
+  .menu-pane nav {
+    padding: 30%;
+  }
+  
+  .menu-links li, a, span {
+        transition: 0.5s ease-in-out;
+  }
+  
+  .menu-pane ul {
+    padding: 10%;
+    display: inline-block;
+  }
+  
+  .menu-pane li {
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-left: 10px;
+      font-size: 1em;
+  }
+  
+  
+  .menu-pane li:first-child {
+    font-size: 1.3em;
+    margin-left: -10px;
+  }
+  
+  
+  .menu-links li a {
+    text-decoration: none;
+  }
+  
+  
+  .menu-links li:hover a {
+    color: #FFAB91;
+  }
+  
+  .menu-links li:first-child:hover a {
+    color: black;  
+    background-color: #FFAB91;
+  }
+  
+  #QC-info {
+    background-color: #FFAB91;
+      border: 2px solid;
+    border-color: #FFAB91;
+  display: block;
+    opacity: 0;
+    
+  }
+  
+  .menu-links li:first-child:hover #QC-info {
+  opacity: 1;
+  }
+  
+  .menu-links li:first-child:hover #DC-info {
+  opacity: 1;
+  }
+  
+  #DC-info {
+    background-color: #FFAB91;
+      border: 2px solid;
+    border-color: #FFAB91;
+  display: block;
+    opacity: 0;
+  }
+  
+  
+  .menu-links li:first-child a {
+    padding: 5px;
+  }
+  
+  
+  
+  input.hamburger-checkbox {
+    position: absolute;
+    z-index: 3;
+    top: 50vh;
+    left: 5vw;
+    width: 10vw;
+    opacity: 0;
+    height: 6vh;
+  }
+  .spacer {
+    flex: 1;
+  }
+
+  .toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: #1cf1aa;
+    color: rgb(238, 98, 122);
+    font-weight: 700;
+    font-size: x-large;
+    padding-left: 10px;
+  }
+  .toolbar p.split {
+    position: absolute;
+    z-index: 1;
+    top: 2vh;
+    right: 5vw;
+    padding-bottom: 20vh;
+  }
+  .toolbar input.split1 {
+    position: absolute;
+    z-index: 1;
+    top: 3vh;
+    right: 13vw;
+    padding-bottom: 1vh;
+  }
+  .toolbar button.split2 {
+    position: absolute;
+    z-index: 1;
+    top: 2vh;
+    right: 25vw;
+    padding-bottom: 1vh;
+    border: 1px solid rgb(0, 34, 128);
+    border-radius: 12px;  
+    background-color: #1cd8f1;
+    font-size: 24px;
+    color: #faded6;
+  }
+  .toolbar button.split3 {
+    position: absolute;
+    z-index: 1;
+    top: 2vh;
+    right: 32vw;
+    padding-bottom: 1vh;
+    border: 1px solid rgb(18, 67, 173);
+    border-radius: 12px;   
+    background-color: #1ceaf1;
+    font-size: 24px;
+    color: #fcdfd6;
+  }
+  .toolbar button.split3:hover, .toolbar button.split2:hover{
+    background-color: #23bbe0; 
+    color: white;
+  }
+  .toolbar button.split4 {
+    position: absolute;
+    z-index: 1;
+    top: 2vh;
+    right: 50vw;
+    padding-bottom: 1vh;
+    border-radius: 12px;   
+    color: #f16fb7;
+    background-color: #1cd1f1;
+    font-size: 24px;
+  }
+  .content {
+    display: flex;
+    margin: 82px auto 32px;
+    padding: 0 16px;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+    background-image: url("site-background.jpg");
+  }
+
+  body{
+    background-image:  url("site-background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
+ 
+  footer {    
+    position: fixed;
+    margin-top: 500px;
+    display: flex;
+    align-items: left;
+    line-height: 20px;
+  }
+
+
+ 

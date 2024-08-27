@@ -40,7 +40,7 @@
           placeholder="name@flowbite.com"
         />
         <p
-          *ngIf="controls.email.touched && controls.email.errors?.required"
+        *ngIf="controls.email.touched && controls.email.errors?.['required']"
           id="helper-text-explanation"
           class="mt-2 text-sm text-red-600 dark:text-gray-400"
         >
@@ -62,7 +62,7 @@
           placeholder="•••••••"
         />
         <p
-          *ngIf="controls.password.touched && controls.password.errors?.required"
+        *ngIf="controls.email.touched && controls.email.errors?.['required']"
           id="helper-text-explanation"
           class="mt-2 text-sm text-red-600 dark:text-gray-400"
         >

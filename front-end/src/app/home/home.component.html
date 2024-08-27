@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="home.component.css">
+<!-- Toolbar -->
+<header>
+  <div class="toolbar" role="banner">
+   
+    <img src="siteIcon.jpg">
+    <span>Trivia Maker</span>
+    <a href="#"><i class="fa fa-search"></i></a>
+   <button class="split4">Explore Tests</button>
+  <button class="split3" id="register" routerLink="/register">Sign In</button> 
+  
+  <button class="split2" routerLink="/login">Log In</button>  
+  <input class="split1" type="text" placeholder="Search..">
+  
+  <p class="split">Menu</p>
+
+</div>
+</header>
+
+<div class="menu-container">
+  
+  <input type="checkbox" id="openmenu" class="hamburger-checkbox">
+  
+  <div class="hamburger-icon">
+    <label for="openmenu" id="hamburger-label">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>    
+  </div>
+
+    <div class="menu-pane">
+      
+      <nav>
+        <ul class="menu-links">
+          
+          <li><a href="###">Play tests</a></li>
+          <li><a href="###">Create test</a></li>
+          <li><a href="###">Competitions</a></li>
+          <li><a href="###">Info</a></li>
+          <li><a href="###">Premium options</a></li>
+        </ul>    
+      </nav>
+      
+    </div>
+<body style="background-image: url(site-background.jpg);">
+    <div class="content" role="main">
+  <!-- Highlight Card -->
+  <div class="card highlight-card card-small" >
+    <main class="container mx-auto my-10" >
+      <div className="App">
+    
+      </div>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  <!-- Footer -->
+  <footer > 
+    <p class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+      © 2022 <a href="/" class="hover:underline">Trivia Maker</a> by Galya Dodova
+    </p>
+ </footer>
+</div>
+</body>
+
+
+
+

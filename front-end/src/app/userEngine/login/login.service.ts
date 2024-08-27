@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { HttpClientModule } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   constructor(private http: HttpClient, private readonly router: Router) {}
