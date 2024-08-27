@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { QuizService } from '../quiz/quiz_service';
 @Component({
   selector: 'app-quiz-result',
-  templateUrl: './quiz-result.component.html',
-  styleUrls: ['./quiz-result.component.scss'],
+  templateUrl: './result_component.html',
+  styleUrls: ['./result_component.scss'],
 })
 export class QuizResultComponent implements OnInit {
   constructor(private quizService: QuizService, private router: Router) {}

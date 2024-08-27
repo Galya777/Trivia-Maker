@@ -13,8 +13,8 @@ import {
 
 @Component({
   selector: 'app-quiz',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.scss'],
+  templateUrl: './quiz_components.html',
+  styleUrls: ['./quiz_components.scss'],
 })
 export class QuizComponent implements OnInit {
   constructor(

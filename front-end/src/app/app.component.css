@@ -1,7 +1,7 @@
 :host {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 14px;
-    color: #0d7a96;
+    color: #12b6df;
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -203,9 +203,9 @@
     top: 2vh;
     right: 25vw;
     padding-bottom: 1vh;
-    border: 1px solid green;
+    border: 1px solid rgb(0, 34, 128);
     border-radius: 12px;  
-    background-color: #1cf1aa;
+    background-color: #1cd8f1;
     font-size: 24px;
     color: #faded6;
   }
@@ -215,14 +215,14 @@
     top: 2vh;
     right: 32vw;
     padding-bottom: 1vh;
-    border: 1px solid green;
+    border: 1px solid rgb(18, 67, 173);
     border-radius: 12px;   
-    background-color: #1cf1aa;
+    background-color: #1ceaf1;
     font-size: 24px;
     color: #fcdfd6;
   }
   .toolbar button.split3:hover, .toolbar button.split2:hover{
-    background-color: #4CAF50; 
+    background-color: #23bbe0; 
     color: white;
   }
   .toolbar button.split4 {
@@ -233,7 +233,7 @@
     padding-bottom: 1vh;
     border-radius: 12px;   
     color: #f16fb7;
-    background-color: #1cf1aa;
+    background-color: #1cd1f1;
     font-size: 24px;
   }
   .content {
