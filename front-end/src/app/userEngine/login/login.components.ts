@@ -5,6 +5,7 @@ import { LoginService } from './login.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.components.html',
+  styleUrls: ['./login.components.css']
 })
 export class LoginComponent implements OnInit {
   constructor(public readonly loginService: LoginService) {}

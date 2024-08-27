@@ -1,0 +1,127 @@
+/* Container styling */
+.register {
+    background-color: #f8fafc; /* Light background color for the section */
+    border-radius: 12px; /* Rounded corners */
+    padding: 2rem; /* Padding inside the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 500px; /* Maximum width of the section */
+    margin: 3rem auto; /* Center the container on the page */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+  }
+  
+  /* Hover effect for the form container */
+  .register:hover {
+    transform: translateY(-5px); /* Slight lift effect */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+  }
+  
+  /* Form styling */
+  .register form {
+    display: flex;
+    flex-direction: column; /* Stack form elements vertically */
+  }
+  
+  /* Input and label styling */
+  .register label {
+    color: #334155; /* Dark gray color for text */
+    font-weight: 600; /* Slightly bolder font */
+    margin-bottom: 0.5rem; /* Spacing between label and input */
+  }
+  
+  .register input {
+    border: 1px solid #d1d5db; /* Border color */
+    border-radius: 8px; /* Rounded corners */
+    padding: 0.75rem; /* Padding inside input */
+    font-size: 1rem; /* Larger font size for better readability */
+    transition: border-color 0.2s ease; /* Smooth transition for border color */
+    background-color: #f0f4f8; /* Light background for inputs */
+  }
+  
+  /* Input focus styling */
+  .register input:focus {
+    border-color: #2563eb; /* Blue border on focus */
+    outline: none; /* Remove default outline */
+    background-color: #ffffff; /* White background on focus */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Light blue glow effect */
+  }
+  
+  /* Button styling */
+  .register button {
+    background-color: #2563eb; /* Blue background */
+    color: #ffffff; /* White text */
+    padding: 0.75rem 1.5rem; /* Padding inside button */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    font-size: 1rem; /* Larger font size for better readability */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effects */
+    margin-top: 1rem; /* Spacing above button */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  /* Button hover effect */
+  .register button:hover {
+    background-color: #1d4ed8; /* Darker blue on hover */
+    transform: translateY(-3px); /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+  }
+  
+  /* Additional text styling */
+  .register .text-sm {
+    font-size: 0.875rem; /* Smaller font size for additional text */
+    color: #6b7280; /* Medium gray color */
+  }
+  
+  /* Link styling */
+  .register a {
+    color: #2563eb; /* Blue text for links */
+    text-decoration: none; /* Remove underline */
+    font-weight: 600; /* Bolder font */
+  }
+  
+  /* Link hover effect */
+  .register a:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  /* Dark mode styling */
+  @media (prefers-color-scheme: dark) {
+    .register {
+      background-color: #1e293b; /* Dark background for dark mode */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Stronger shadow in dark mode */
+    }
+  
+    .register label {
+      color: #e2e8f0; /* Lighter text color in dark mode */
+    }
+  
+    .register input {
+      background-color: #374151; /* Darker input background */
+      color: #f3f4f6; /* Light input text color */
+      border-color: #4b5563; /* Darker border color */
+    }
+  
+    .register input:focus {
+      background-color: #1f2937; /* Dark input background on focus */
+      border-color: #3b82f6; /* Lighter blue border on focus */
+    }
+  
+    .register button {
+      background-color: #3b82f6; /* Blue background for dark mode */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow for buttons */
+    }
+  
+    .register button:hover {
+      background-color: #2563eb; /* Darker blue on hover in dark mode */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+    }
+  
+    .register .text-sm {
+      color: #9ca3af; /* Lighter gray color for text in dark mode */
+    }
+  
+    .register a {
+      color: #60a5fa; /* Lighter blue for links in dark mode */
+    }
+  }
+  
