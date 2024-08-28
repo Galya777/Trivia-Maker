@@ -7,22 +7,14 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './userEngine/login/login.components';
 import { RegisterComponent } from './userEngine/register/register.components';
-import { HttpClientModule } from '@angular/common/http';
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent, 
-    LoginComponent,
-    RegisterComponent
-
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        LoginComponent,
+        RegisterComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
