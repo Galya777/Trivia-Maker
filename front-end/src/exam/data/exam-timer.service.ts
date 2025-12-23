@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/interval';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/startWith';
+import { Observable, interval } from 'rxjs';
+import { map, take, startWith } from 'rxjs/operators';
 
 @Injectable()
 export class ExamTimerService
@@ -14,6 +11,6 @@ export class ExamTimerService
      */
     public getTimer(duration: number): Observable<number>
     {
-        return Observable.interval(1000).map(i => duration - i - 1).take(duration).startWith(duration);
+        return interval(1000).pipe(map((i: any) => duration - i - 1), take(duration), startWith(duration));
     }
 }

@@ -1,9 +1,8 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/concat';
-import 'rxjs/add/observable/fromPromise';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { Observable, concat, of } from 'rxjs';
+import { mergeMap, take, map, filter } from 'rxjs/operators';
 
 import { ExamStatusAction, ExamEndAction, ExamScoreAction } from '../actions/exam.actions';
 import { ExamEvalService } from '../../data/exam-eval.service';
@@ -21,36 +20,35 @@ import { AsyncDataSer } from '../../../utils/asyncData';
 @Injectable()
 export class ExamEndEffects
 {
-    @Effect()
-    public effect$: Observable<Action>;
+    public effect$ = createEffect(() => this.actions$.pipe(
+        ofType<ExamEndAction>(ExamEndAction.type),
+        mergeMap(
+            action => concat(
+                of(new ExamStatusAction({ status: action.payload.status })),
+                this.store$.pipe(
+                    take(1),
+                    map(getExamData),
+                    filter((a: any) => a !== null),
+                    mergeMap(
+                        ({ examInfo, questions }: { examInfo: any, questions: any }) =>
+                        {
+                            return concat(
+                                of(new ExamScoreAction({ score: AsyncDataSer.loading<number>() })),
+                                this.examEvalService.evalQuestions(examInfo, questions).pipe(
+                                    map((adata: any) => new ExamScoreAction({ score: adata }))
+                                ),
+                            );
+                        }),
+                ),
+            )),
+    ));
 
     constructor(
         private actions$: Actions,
         @Inject(MODULE_STORE_TOKEN)
         private store$: Store<State>,
         private examEvalService: ExamEvalService,
-    )
-    {
-        this.effect$ = this.actions$.ofType<ExamEndAction>(ExamEndAction.type)
-            .mergeMap(
-                action => Observable.concat(
-                    Observable.of(new ExamStatusAction({ status: action.payload.status })),
-                    this.store$
-                        .take(1)
-                        .map(getExamData)
-                        .filter(a => a !== null)
-                        .mergeMap(
-                            ({ examInfo, questions }) =>
-                            {
-                                return Observable.concat(
-                                    Observable
-                                        .of(new ExamScoreAction({ score: AsyncDataSer.loading<number>() })),
-                                    this.examEvalService.evalQuestions(examInfo, questions)
-                                        .map(adata => new ExamScoreAction({ score: adata })),
-                                );
-                            }),
-            ));
-    }
+    ) {}
 }
 
 function getExamData(storeState: State)

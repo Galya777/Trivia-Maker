@@ -1,10 +1,10 @@
 ﻿import { TestBed, fakeAsync, flush } from '@angular/core/testing';
 import { StoreModule, Action, Store } from '@ngrx/store';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { matchObservable } from 'match-observable';
 
-import { RouterOutEffects } from './router-out.effects';
 import { ExamEndEffects } from './exam-end.effects';
 import { AsyncDataSer } from '../../../utils/asyncData';
 import { ExamEvalService } from '../../data/exam-eval.service';
@@ -22,15 +22,15 @@ describe('Exam/Logic/' + ExamEndEffects.name, () =>
 {
     let store$: Store<State>;
     let actions: Observable<any>;
-    let effects: RouterOutEffects;
-    let examEvalServiceSpy: jasmine.SpyObj<ExamEvalService> = null;
+    let effects: ExamEndEffects;
+    let examEvalServiceSpy: jasmine.SpyObj<ExamEvalService>;
 
     function init(initialState: State)
     {
         const serviceSpy = jasmine.createSpyObj<ExamEvalService>(
             'ExamEvalService',
             {
-                evalQuestions: Observable.of(new AsyncDataSer<number>(0)),
+                evalQuestions: of(new AsyncDataSer<number>(0)),
             });
 
         TestBed.configureTestingModule({
@@ -41,15 +41,15 @@ describe('Exam/Logic/' + ExamEndEffects.name, () =>
             ],
             providers: [
                 ExamEndEffects,
-                provideMockActions(() => actions.do(a => store$.dispatch(a))),
+                provideMockActions(() => actions.pipe(tap(a => store$.dispatch(a)))),
                 { provide: MODULE_STORE_TOKEN, useExisting: Store },
                 { provide: ExamEvalService, useValue: serviceSpy },
             ],
         });
 
-        effects = TestBed.get(ExamEndEffects);
-        store$ = TestBed.get(Store);
-        examEvalServiceSpy = TestBed.get(ExamEvalService);
+        effects = TestBed.inject(ExamEndEffects);
+        store$ = TestBed.inject(Store);
+        examEvalServiceSpy = serviceSpy;
     }
 
     it('should emit the correct actions.', () => fakeAsync(() =>
@@ -69,16 +69,16 @@ describe('Exam/Logic/' + ExamEndEffects.name, () =>
             },
         });
 
-        actions = Observable.of(new ExamEndAction({ status: ExamStatus.ENDED }));
+        actions = of(new ExamEndAction({ status: ExamStatus.ENDED }));
         const score = new AsyncDataSer<number>(0);
         const expected =  [
             new ExamStatusAction({ status: ExamStatus.ENDED }),
             new ExamScoreAction({ score: AsyncDataSer.loading<number>() }),
             new ExamScoreAction({ score }),
         ];
-        let matchResult: string;
-        matchObservable<Action>(effects.effect$.catch(failOnObsError), expected, true, false, deepEqual)
-            .then(() => matchResult = null, result => matchResult = result);
+        let matchResult: string | null = null;
+        matchObservable<Action>(effects.effect$.pipe(catchError(failOnObsError)), expected, true, false, deepEqual)
+            .then(() => matchResult = null, (result: any) => matchResult = result);
         flush();
         expect(matchResult).toBeNull();
 
