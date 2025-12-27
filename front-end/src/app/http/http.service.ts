@@ -15,51 +15,109 @@ export class HttpService {
 
   // Method to login in the application
   login(data: any) {
-    return this.http.post<any>(`${environment.production}/auth/login`, data);
+    return this.http.post<any>(`${environment.production}/api/login`, data);
   }
 
   // Method to register in the application
   register(data: any) {
-    return this.http.post<any>(`${environment.production}/users`, data);
+    return this.http.post<any>(`${environment.production}/api/users`, data);
   }
 
-  // Method to get the user profile 
+  // Method to get the user profile
   profile(): Observable<any> {
     return this.http.get<any>(
-      `${environment.production}/users/profile`,
+      `${environment.production}/api/users/profile`,
       this.httpOptions
     );
   }
 
-  // Method to get all tests in Database
-  getAllTests(): Observable<any> {
-    return this.http.get<any>(`${environment.production}/tests`);
+  // Method to get all tests
+  getTests(): Observable<any> {
+    return this.http.get<any>(`${environment.production}/api/tests`, this.httpOptions);
   }
 
-  // Method to get all tests made by a user in Database
-  getTestByUser(): Observable<any> {
-    return this.http.get<any>(
-      `${environment.production}/tests/by-user`,
-      this.httpOptions
-    );
+  // Method to get test by id
+  getTest(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.production}/api/tests/${id}`, this.httpOptions);
   }
-  // Method to get tests by user _id in params
-  getTestsByUserId(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.production}/recipes/user/${id}`);
-  }
-  // Method to create tests in Database
+
+  // Method to create test
   createTest(data: any): Observable<any> {
     return this.http.post<any>(
-      `${environment.production}/tests`,
+      `${environment.production}/api/tests`,
       data,
       this.httpOptions
     );
   }
 
-  // Method to delete tests in Database
-  deleteTests(id: string): Observable<any> {
+  // Method to update test
+  updateTest(id: string, data: any): Observable<any> {
+    return this.http.put<any>(
+      `${environment.production}/api/tests/${id}`,
+      data,
+      this.httpOptions
+    );
+  }
+
+  // Method to delete test
+  deleteTest(id: string): Observable<any> {
     return this.http.delete<any>(
-      `${environment.production}/tests/${id}`,
+      `${environment.production}/api/tests/${id}`,
+      this.httpOptions
+    );
+  }
+
+  // Method to get test results
+  getTestResults(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.production}/api/tests/${id}/results`, this.httpOptions);
+  }
+
+  // Method to submit test result
+  submitResult(id: string, data: any): Observable<any> {
+    return this.http.post<any>(
+      `${environment.production}/api/tests/${id}/results`,
+      data,
+      this.httpOptions
+    );
+  }
+
+  // Competitions
+  getCompetitions(): Observable<any> {
+    return this.http.get<any>(`${environment.production}/api/competitions`, this.httpOptions);
+  }
+
+  createCompetition(data: any): Observable<any> {
+    return this.http.post<any>(
+      `${environment.production}/api/competitions`,
+      data,
+      this.httpOptions
+    );
+  }
+
+  joinCompetition(id: string, token: string): Observable<any> {
+    return this.http.post<any>(
+      `${environment.production}/api/competitions/${id}/join`,
+      { token },
+      this.httpOptions
+    );
+  }
+
+  // Users (for admin)
+  getUsers(): Observable<any> {
+    return this.http.get<any>(`${environment.production}/api/users`, this.httpOptions);
+  }
+
+  updateUser(id: string, data: any): Observable<any> {
+    return this.http.put<any>(
+      `${environment.production}/api/users/${id}`,
+      data,
+      this.httpOptions
+    );
+  }
+
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete<any>(
+      `${environment.production}/api/users/${id}`,
       this.httpOptions
     );
   }

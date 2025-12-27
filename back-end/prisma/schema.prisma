@@ -31,6 +31,147 @@ model Roles {
   @@unique([role], map: "roleShouldBeUnique")
 }
 
-model Tests{
+model Tests {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  category    String
+  description String?
+  tags        String[] // array of tags
+  references  String[] // array of reference links
+  isPublic    Boolean  @default(true)
+  isPremium   Boolean  @default(false)
+  createdBy   Users    @relation(fields: [userId], references: [id])
+  userId      String   @db.ObjectId
+  questions   Questions[]
+  competitionTests CompetitionTests[]
+  results     TestResults[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
 
+model Questions {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  type       String   // text, image, video
+  content    String   // question text or media URL
+  test       Tests    @relation(fields: [testId], references: [id])
+  testId     String   @db.ObjectId
+  answers    Answers[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Answers {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  content    String   // answer text or media
+  weight     Int      @default(0) // score for this answer
+  question   Questions @relation(fields: [questionId], references: [id])
+  questionId String   @db.ObjectId
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Competitions {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  token      String   @unique // for enrollment
+  createdBy  Users    @relation("CreatedCompetitions", fields: [userId], references: [id])
+  userId     String   @db.ObjectId
+  players    CompetitionPlayers[]
+  competitionTests CompetitionTests[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model CompetitionPlayers {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  competition   Competitions @relation(fields: [competitionId], references: [id])
+  competitionId String      @db.ObjectId
+  user          Users       @relation(fields: [userId], references: [id])
+  userId        String      @db.ObjectId
+  joined_at     DateTime    @default(now())
+
+  @@unique([competitionId, userId])
+}
+
+model CompetitionTests {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  competition   Competitions @relation(fields: [competitionId], references: [id])
+  competitionId String       @db.ObjectId
+  test          Tests        @relation(fields: [testId], references: [id])
+  testId        String       @db.ObjectId
+  added_at      DateTime     @default(now())
+
+  @@unique([competitionId, testId])
+}
+
+model TestResults {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  user       Users    @relation(fields: [userId], references: [id])
+  userId     String   @db.ObjectId
+  test       Tests    @relation(fields: [testId], references: [id])
+  testId     String   @db.ObjectId
+  score      Int
+  answers    Json     // array of selected answers
+  completed_at DateTime @default(now())
+}
+
+model Badges {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  description String?
+  icon       String   // URL or path
+  userBadges UserBadges[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Avatars {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  image      String   // URL
+  userAvatars UserAvatars[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model UserBadges {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  user    Users  @relation(fields: [userId], references: [id])
+  userId  String @db.ObjectId
+  badge   Badges @relation(fields: [badgeId], references: [id])
+  badgeId String @db.ObjectId
+  earned_at DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+model UserAvatars {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  user     Users   @relation(fields: [userId], references: [id])
+  userId   String  @db.ObjectId
+  avatar   Avatars @relation(fields: [avatarId], references: [id])
+  avatarId String  @db.ObjectId
+  assigned_at DateTime @default(now())
+
+  @@unique([userId, avatarId])
+}
+
+// Update Users model
+model Users {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  email      String
+  password   String
+  role       Roles    @relation(fields: [roleId], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  roleId  String    @db.ObjectId
+  Tests Tests[]
+  createdCompetitions Competitions[] @relation("CreatedCompetitions")
+  competitionPlayers CompetitionPlayers[]
+  TestResults TestResults[]
+  userBadges UserBadges[]
+  userAvatars UserAvatars[]
+  @@unique([email], map: "emailShouldBeUnique")
 }

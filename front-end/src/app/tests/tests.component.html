@@ -1,0 +1,14 @@
+<div class="tests-container">
+  <h1>Tests</h1>
+  <button (click)="createTest()">Create New Test</button>
+  <div class="tests-list">
+    <div *ngFor="let test of tests" class="test-item">
+      <h3>{{ test.name }}</h3>
+      <p>{{ test.description }}</p>
+      <p>Category: {{ test.category }}</p>
+      <button (click)="takeTest(test.id)">Take Test</button>
+      <button (click)="editTest(test.id)">Edit</button>
+      <button (click)="deleteTest(test.id)">Delete</button>
+    </div>
+  </div>
+</div>
