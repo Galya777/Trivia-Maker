@@ -9,5 +9,5 @@ export interface State
 
 export const initialState: State = {
     current: 1,
-    data: null,
+    data: new AsyncDataSer<Question[]>(null),
 };

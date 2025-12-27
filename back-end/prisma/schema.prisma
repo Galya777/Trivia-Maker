@@ -18,6 +18,11 @@ model Users {
 
   roleId  String    @db.ObjectId
   Tests Tests[]
+  createdCompetitions Competitions[] @relation("CreatedCompetitions")
+  competitionPlayers CompetitionPlayers[]
+  TestResults TestResults[]
+  userBadges UserBadges[]
+  userAvatars UserAvatars[]
   @@unique([email], map: "emailShouldBeUnique")
 }
 
@@ -154,24 +159,4 @@ model UserAvatars {
   assigned_at DateTime @default(now())
 
   @@unique([userId, avatarId])
-}
-
-// Update Users model
-model Users {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  email      String
-  password   String
-  role       Roles    @relation(fields: [roleId], references: [id])
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  roleId  String    @db.ObjectId
-  Tests Tests[]
-  createdCompetitions Competitions[] @relation("CreatedCompetitions")
-  competitionPlayers CompetitionPlayers[]
-  TestResults TestResults[]
-  userBadges UserBadges[]
-  userAvatars UserAvatars[]
-  @@unique([email], map: "emailShouldBeUnique")
 }

@@ -1,11 +1,9 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction, RouterStateSerializer } from '@ngrx/router-store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, map, filter, withLatestFrom } from 'rxjs';
 import { NavigationGoAction, RouterStateSerializer as CustomRouterStateSerializer, RouterStateSer } from 'router-store-ser';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
 
 import { QuestionsCurrentAction } from '../actions/questions.actions';
 import { questionRouteId, questionParamNum } from '../../exam-routing.module';
@@ -22,12 +20,34 @@ import { State, MODULE_STORE_TOKEN } from '../state/state';
   *     - \>NAVIGATION_GO(EXAM_RESULT)
   *   - else
   *     - \>NAVIGATION_GO(EXAM_START)
- */
+  */
 @Injectable()
 export class RouterQuestionCurrentEffects
 {
-    @Effect()
-    public effect$: Observable<Action>;
+    public effect$ = createEffect(() => this.actions$.pipe(
+        ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_NAVIGATION),
+        map((action) => {
+            let num = null;
+            const node = this.routerStateSerializer.findNodeById(action.payload.routerState.root, questionRouteId);
+            if (node)
+                num = Number.parseInt(node.params[questionParamNum]);
+            return num;
+        }),
+        filter((n: number | null) => n !== null),
+        withLatestFrom(this.store$.select(state => state.exam.status)),
+        map(([num, examStatus]) => {
+            if (examStatus === ExamStatus.RUNNING && !isNaN(num!))
+                return new QuestionsCurrentAction({ num: num! });
+            else if ((examStatus === ExamStatus.ENDED || examStatus === ExamStatus.TIME_ENDED) && !isNaN(num!))
+                return new NavigationGoAction({
+                    commands: [...moduleNavigationCommands, 'result'],
+                });
+            else
+                return new NavigationGoAction({
+                    commands: [...moduleNavigationCommands, 'start'],
+                });
+        })
+    ));
 
     constructor(
         private actions$: Actions,
@@ -37,33 +57,5 @@ export class RouterQuestionCurrentEffects
         protected routerStateSerializer: CustomRouterStateSerializer,
     )
     {
-        const examStatus$: Store<ExamStatus> = this.store$.select(state => state.exam.status);
-
-        this.effect$ = this.actions$.ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_NAVIGATION)
-            .map<RouterNavigationAction<RouterStateSer>, number>(
-            (action) =>
-            {
-                let num = null;
-                const node = this.routerStateSerializer.findNodeById(action.payload.routerState.root, questionRouteId);
-                if (node)
-                    num = Number.parseInt(node.params[questionParamNum]);
-                return num;
-            })
-            .filter(n => n !== null)
-            .withLatestFrom(examStatus$)
-            .map(
-                ([num, examStatus]) =>
-                {
-                    if (examStatus === ExamStatus.RUNNING && !isNaN(num))
-                        return new QuestionsCurrentAction({ num });
-                    else if ((examStatus === ExamStatus.ENDED || examStatus === ExamStatus.TIME_ENDED) && !isNaN(num))
-                        return new NavigationGoAction({
-                            commands: [...moduleNavigationCommands, 'result'],
-                        });
-                    else
-                        return new NavigationGoAction({
-                            commands: [...moduleNavigationCommands, 'start'],
-                        });
-                });
     }
 }

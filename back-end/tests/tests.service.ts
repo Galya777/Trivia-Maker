@@ -27,7 +27,7 @@ export class TestsService {
         where: {
           OR: [
             { isPublic: true },
-            { createdById: user.id },
+            { userId: user.id },
             { isPremium: false }, // assuming premium check
           ],
         },

@@ -1,12 +1,9 @@
 ﻿import { Inject, Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RouterNavigationAction, RouterStateSerializer } from '@ngrx/router-store';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/concat';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/mergeMap';
+import { of, concat } from 'rxjs';
+import { filter, mergeMap } from 'rxjs/operators';
 
 import { ExamStatusAction, ExamDataAction } from '../actions/exam.actions';
 import { startRouteId } from '../../exam-routing.module';
@@ -29,34 +26,32 @@ import { QuestionsDataAction } from '../actions/questions.actions';
 @Injectable()
 export class RouterStartEffects
 {
-    @Effect()
-    public effect$: Observable<Action>;
+    public effect$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_ACTIVE),
+            filter(action => !!this.routerStateSerializer.findNodeById(action.payload.routerState.root, startRouteId)),
+            mergeMap((action) =>
+                concat(
+                    of(new ExamStatusAction({ status: ExamStatus.OFF })),
+                    this.examFetchService.fetchExam().pipe(
+                        filter(adata => AsyncDataSer.hasData(adata, true)),
+                        mergeMap((adata) =>
+                            of(
+                                new ExamDataAction({ data: adata }),
+                                new QuestionsDataAction({ data: null }),
+                                new ExamStatusAction({ status: ExamStatus.READY })
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
 
     constructor(
         protected actions$: Actions,
         @Inject(RouterStateSerializer)
         protected routerStateSerializer: CustomRouterStateSerializer,
         protected examFetchService: ExamFetchService,
-    )
-    {
-        this.effect$ = this.actions$.ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_ACTIVE)
-            .filter(action => !!this.routerStateSerializer.findNodeById(action.payload.routerState.root, startRouteId))
-            .mergeMap(
-                (action) =>
-                {
-                    return Observable.concat(
-                        Observable.of(new ExamStatusAction({ status: ExamStatus.OFF })),
-                        this.examFetchService.fetchExam()
-                            .filter(adata => AsyncDataSer.hasData(adata, true))
-                            .mergeMap(
-                                (adata) =>
-                                {
-                                    return Observable.of(...[
-                                        new ExamDataAction({ data: adata }),
-                                        new QuestionsDataAction({ data: null }),
-                                        new ExamStatusAction({ status: ExamStatus.READY }),
-                                    ]);
-                                }));
-                });
-    }
+    ) {}
 }

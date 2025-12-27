@@ -1,5 +1,5 @@
 import { RouterStateSer } from 'router-store-ser';
-import { startRouteId } from '../app/app-routing.module';
+import { startRouteId } from '../exam/exam-routing.module';
 
 /**
  * This object helps build mocked router states for testing.

@@ -37,15 +37,22 @@ export function setAnswer(
     { questionNum, answerNum, checked }: { questionNum: number, answerNum: number, checked: boolean },
 ): AsyncDataSer<Question[]>
 {
+    if (!questions.data)
+    {
+        return questions;
+    }
+
     const newData: AsyncDataSer<Question[]> = {
         ...questions,
         data: [...questions.data],
     };
 
-    if (questionNum > 0 && questionNum <= newData.data.length)
+    const data = newData.data as Question[];
+
+    if (questionNum > 0 && questionNum <= data.length)
     {
-        const question = Object.assign({}, newData.data[questionNum - 1]);
-        newData.data[questionNum - 1] = question;
+        const question = Object.assign({}, data[questionNum - 1]);
+        data[questionNum - 1] = question;
         if (answerNum >= 0 && answerNum < question.answers.length)
         {
             question.answers = [...question.answers];

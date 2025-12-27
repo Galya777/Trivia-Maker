@@ -1,11 +1,9 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction, RouterStateSerializer } from '@ngrx/router-store';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/withLatestFrom';
+import { Observable } from 'rxjs';
+import { filter, map, withLatestFrom } from 'rxjs/operators';
 
 import { ExamEndAction } from '../actions/exam.actions';
 import { ExamStatus, State as ExamState } from '../state/exam.state';
@@ -21,32 +19,29 @@ import { State, MODULE_STORE_TOKEN } from '../state/state';
 @Injectable()
 export class RouterResultEffects
 {
-    @Effect()
-    public effect$: Observable<Action>;
-
-    constructor(
-        protected actions$: Actions,
-        @Inject(MODULE_STORE_TOKEN)
-        protected store$: Store<State>,
-        @Inject(RouterStateSerializer)
-        protected routerStateSerializer: CustomRouterStateSerializer,
-    )
-    {
+    public effect$ = createEffect(() => {
         const exam$: Store<ExamState> = this.store$.select(state => state.exam);
 
-        this.effect$ = this.actions$.ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_NAVIGATION)
-            .withLatestFrom(
-                exam$,
-                (action, exam) =>
-                {
-                    const node = this.routerStateSerializer.findNodeById(action.payload.routerState.root, resultRouteId);
-                    if (node && exam.status !== ExamStatus.ENDED && exam.status !== ExamStatus.TIME_ENDED)
-                        return action;
+        return this.actions$.pipe(
+            ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_NAVIGATION),
+            withLatestFrom(exam$),
+            map(([action, exam]) => {
+                const node = this.routerStateSerializer.findNodeById(action.payload.routerState.root, resultRouteId);
+                if (node && exam.status !== ExamStatus.ENDED && exam.status !== ExamStatus.TIME_ENDED) {
+                    return action;
+                }
+                return null;
+            }),
+            filter(action => action != null),
+            map(action => new ExamEndAction({ status: ExamStatus.ENDED }))
+        );
+    });
 
-                    return null;
-                },
-            )
-            .filter(action => action != null)
-            .map(action => new ExamEndAction({ status: ExamStatus.ENDED }));
-    }
+    constructor(
+        private actions$: Actions,
+        @Inject(MODULE_STORE_TOKEN)
+        private store$: Store<State>,
+        @Inject(RouterStateSerializer)
+        private routerStateSerializer: CustomRouterStateSerializer,
+    ) {}
 }

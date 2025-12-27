@@ -12,8 +12,8 @@ export interface State
 }
 
 export const initialState: State = {
-    data: null,
-    resultScore: null,
+    data: new AsyncDataSer<ExamInfo>(null),
+    resultScore: new AsyncDataSer<number>(null),
     timeLeft: 0,
     status: ExamStatus.OFF,
 };

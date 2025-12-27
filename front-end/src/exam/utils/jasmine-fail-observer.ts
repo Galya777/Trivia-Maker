@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable, EMPTY } from 'rxjs';
 
 export function failOnObsError(err, caught): Observable<any>
 {
@@ -6,5 +6,5 @@ export function failOnObsError(err, caught): Observable<any>
         fail(err.message + '\n' + err.stack);
     else
         fail(err.toString());
-    return Observable.empty();
+    return EMPTY;
 }

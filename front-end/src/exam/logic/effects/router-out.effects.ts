@@ -1,11 +1,9 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction, RouterStateSerializer } from '@ngrx/router-store';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/withLatestFrom';
+import { Observable } from 'rxjs';
+import { filter, map, withLatestFrom } from 'rxjs/operators';
 
 import { ExamStatusAction } from '../actions/exam.actions';
 import { ExamStatus, State as ExamState } from '../state/exam.state';
@@ -21,8 +19,17 @@ import { State, MODULE_STORE_TOKEN } from '../state/state';
 @Injectable()
 export class RouterOutEffects
 {
-    @Effect()
-    public effect$: Observable<Action>;
+    public effect$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ROUTER_NAVIGATION),
+            withLatestFrom(this.store$.select(state => state.exam)),
+            filter(([action, exam]) => {
+                const node = this.routerStateSerializer.findNodeById(action.payload.routerState.root, [resultRouteId, questionRouteId]);
+                return !node && exam.status !== ExamStatus.OFF;
+            }),
+            map(() => new ExamStatusAction({ status: ExamStatus.OFF }))
+        )
+    );
 
     constructor(
         private actions$: Actions,

@@ -1,14 +1,16 @@
-import { OnDestroy, ChangeDetectorRef, Inject } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { OnDestroy, ChangeDetectorRef, Inject, Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AsyncDataSer } from '../../utils/asyncData';
 import { ExamInfo } from '../models/exam-info';
 import { State, MODULE_STORE_TOKEN } from '../logic/state/state';
 
+@Injectable()
 export class CommonContainer implements OnDestroy
 {
-    public examInfoA: AsyncDataSer<ExamInfo> = null;
+    public examInfoA: AsyncDataSer<ExamInfo> = new AsyncDataSer<ExamInfo>(null);
 
     public ngOnDestroy()
     {
@@ -23,8 +25,8 @@ export class CommonContainer implements OnDestroy
     {
         this.store$
             .select(state => state.exam.data)
-            .takeUntil(this.componentDestroyed$)
-            .subscribe({ next: examInfo => this.nextExamInfo(examInfo), error: (e) => { throw e; } });
+            .pipe(takeUntil(this.componentDestroyed$))
+            .subscribe({ next: (examInfo: AsyncDataSer<ExamInfo>) => this.nextExamInfo(examInfo), error: (e) => { throw e; } });
     }
 
     protected componentDestroyed$: Subject<void> = new Subject<void>();

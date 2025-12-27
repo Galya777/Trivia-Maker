@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, NavigationEnd, RoutesRecognized, RouterStateSnapshot } from '@angular/router';
 import { RouterNavigationAction, RouterStateSerializer, RouterReducerState } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/withLatestFrom';
+import { filter, withLatestFrom } from 'rxjs/operators';
 
 export const ROUTER_ACTIVE = 'ROUTER_ACTIVE';
 
@@ -31,32 +30,32 @@ export class RouterStoreExtension
                     this.lastRoutesRecognized = e;
             });
 
-        router.events
-            .filter(event => event instanceof NavigationEnd)
-            .withLatestFrom(store$.select<RouterReducerState>(state => state.routerReducer))
-            .subscribe(
-                ([event, routerReducer]: [NavigationEnd, RouterReducerState]) =>
+        router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+            withLatestFrom(store$.select<RouterReducerState>(state => state.routerReducer))
+        ).subscribe(
+            ([event, routerReducer]: [NavigationEnd, RouterReducerState]) =>
+            {
+                // when timetraveling the event.id is an old one, but the navigation triggered uses a new id
+                // this prevents the dispatch of ROUTER_ACTIVE when the state was changed by dev tools
+                if (routerReducer.navigationId === event.id && this.lastRoutesRecognized)
                 {
-                    // when timetraveling the event.id is an old one, but the navigation triggered uses a new id
-                    // this prevents the dispatch of ROUTER_ACTIVE when the state was changed by dev tools
-                    if (routerReducer.navigationId === event.id)
-                    {
-                        const routerStateSer = stateSerializer.serialize(router.routerState.snapshot);
-                        store$.dispatch({
-                            type: ROUTER_ACTIVE as any,
-                            payload: {
-                                routerState: routerStateSer,
-                                event: new RoutesRecognized(
-                                    this.lastRoutesRecognized.id,
-                                    this.lastRoutesRecognized.url,
-                                    this.lastRoutesRecognized.urlAfterRedirects,
-                                    routerStateSer as any,
-                                ),
-                            },
-                        } as RouterNavigationAction<RouterStateSnapshot>);
-                    }
-                });
+                    const routerStateSer = stateSerializer.serialize(router.routerState.snapshot);
+                    store$.dispatch({
+                        type: ROUTER_ACTIVE as any,
+                        payload: {
+                            routerState: routerStateSer,
+                            event: new RoutesRecognized(
+                                this.lastRoutesRecognized.id,
+                                this.lastRoutesRecognized.url,
+                                this.lastRoutesRecognized.urlAfterRedirects,
+                                routerStateSer as any,
+                            ),
+                        },
+                    } as RouterNavigationAction<RouterStateSnapshot>);
+                }
+            });
     }
 
-    protected lastRoutesRecognized: RoutesRecognized = null;
+    protected lastRoutesRecognized: RoutesRecognized | null = null;
 }
