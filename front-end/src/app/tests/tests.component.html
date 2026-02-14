@@ -1,14 +1,30 @@
-<div class="tests-container">
-  <h1>Tests</h1>
-  <button (click)="createTest()">Create New Test</button>
-  <div class="tests-list">
-    <div *ngFor="let test of tests" class="test-item">
+<div class="page-container">
+  <div class="page-header">
+    <h1>📚 Тестове</h1>
+    <button class="btn-create" (click)="createTest()">➕ Създай нов тест</button>
+  </div>
+
+  <div class="tests-grid" *ngIf="tests.length > 0; else noTests">
+    <div *ngFor="let test of tests" class="test-card">
+      <div class="test-icon">📝</div>
       <h3>{{ test.name }}</h3>
-      <p>{{ test.description }}</p>
-      <p>Category: {{ test.category }}</p>
-      <button (click)="takeTest(test.id)">Take Test</button>
-      <button (click)="editTest(test.id)">Edit</button>
-      <button (click)="deleteTest(test.id)">Delete</button>
+      <p class="test-description">{{ test.description }}</p>
+      <span class="test-category">🏷️ {{ test.category }}</span>
+      
+      <div class="test-actions">
+        <button class="btn-take" (click)="takeTest(test.id)">🚀 Започни</button>
+        <button class="btn-edit" (click)="editTest(test.id)">✏️ Редактирай</button>
+        <button class="btn-delete" (click)="deleteTest(test.id)">🗑️ Изтрий</button>
+      </div>
     </div>
   </div>
+
+  <ng-template #noTests>
+    <div class="no-tests">
+      <span class="no-tests-icon">📭</span>
+      <h2>Все още няма тестове</h2>
+      <p>Създайте първия си тест!</p>
+      <button class="btn-create-large" (click)="createTest()">➕ Създай тест</button>
+    </div>
+  </ng-template>
 </div>

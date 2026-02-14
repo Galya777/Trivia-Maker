@@ -1,127 +1,139 @@
-/* Container styling */
-.register {
-    background-color: #f8fafc; /* Light background color for the section */
-    border-radius: 12px; /* Rounded corners */
-    padding: 2rem; /* Padding inside the container */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    max-width: 500px; /* Maximum width of the section */
-    margin: 3rem auto; /* Center the container on the page */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+/* Register Page - Pink & Turquoise Theme */
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #ff9a9e 100%);
+  padding: 20px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.register-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  
-  /* Hover effect for the form container */
-  .register:hover {
-    transform: translateY(-5px); /* Slight lift effect */
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Form styling */
-  .register form {
-    display: flex;
-    flex-direction: column; /* Stack form elements vertically */
-  }
-  
-  /* Input and label styling */
-  .register label {
-    color: #334155; /* Dark gray color for text */
-    font-weight: 600; /* Slightly bolder font */
-    margin-bottom: 0.5rem; /* Spacing between label and input */
-  }
-  
-  .register input {
-    border: 1px solid #d1d5db; /* Border color */
-    border-radius: 8px; /* Rounded corners */
-    padding: 0.75rem; /* Padding inside input */
-    font-size: 1rem; /* Larger font size for better readability */
-    transition: border-color 0.2s ease; /* Smooth transition for border color */
-    background-color: #f0f4f8; /* Light background for inputs */
-  }
-  
-  /* Input focus styling */
-  .register input:focus {
-    border-color: #2563eb; /* Blue border on focus */
-    outline: none; /* Remove default outline */
-    background-color: #ffffff; /* White background on focus */
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Light blue glow effect */
-  }
-  
-  /* Button styling */
-  .register button {
-    background-color: #2563eb; /* Blue background */
-    color: #ffffff; /* White text */
-    padding: 0.75rem 1.5rem; /* Padding inside button */
-    border: none; /* Remove default border */
-    border-radius: 8px; /* Rounded corners */
-    font-size: 1rem; /* Larger font size for better readability */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effects */
-    margin-top: 1rem; /* Spacing above button */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  }
-  
-  /* Button hover effect */
-  .register button:hover {
-    background-color: #1d4ed8; /* Darker blue on hover */
-    transform: translateY(-3px); /* Slight lift effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
-  }
-  
-  /* Additional text styling */
-  .register .text-sm {
-    font-size: 0.875rem; /* Smaller font size for additional text */
-    color: #6b7280; /* Medium gray color */
-  }
-  
-  /* Link styling */
-  .register a {
-    color: #2563eb; /* Blue text for links */
-    text-decoration: none; /* Remove underline */
-    font-weight: 600; /* Bolder font */
-  }
-  
-  /* Link hover effect */
-  .register a:hover {
-    text-decoration: underline; /* Underline on hover */
-  }
-  
-  /* Dark mode styling */
-  @media (prefers-color-scheme: dark) {
-    .register {
-      background-color: #1e293b; /* Dark background for dark mode */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Stronger shadow in dark mode */
-    }
-  
-    .register label {
-      color: #e2e8f0; /* Lighter text color in dark mode */
-    }
-  
-    .register input {
-      background-color: #374151; /* Darker input background */
-      color: #f3f4f6; /* Light input text color */
-      border-color: #4b5563; /* Darker border color */
-    }
-  
-    .register input:focus {
-      background-color: #1f2937; /* Dark input background on focus */
-      border-color: #3b82f6; /* Lighter blue border on focus */
-    }
-  
-    .register button {
-      background-color: #3b82f6; /* Blue background for dark mode */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow for buttons */
-    }
-  
-    .register button:hover {
-      background-color: #2563eb; /* Darker blue on hover in dark mode */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
-    }
-  
-    .register .text-sm {
-      color: #9ca3af; /* Lighter gray color for text in dark mode */
-    }
-  
-    .register a {
-      color: #60a5fa; /* Lighter blue for links in dark mode */
-    }
-  }
-  
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.register-header h2 {
+  color: #ff6b9d;
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.register-header p {
+  color: #5dd3d3;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: #444;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 3px solid #e0f7f7;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #5dd3d3;
+  box-shadow: 0 0 0 4px rgba(93, 211, 211, 0.2);
+}
+
+.form-group input.error {
+  border-color: #ff6b6b;
+}
+
+.form-group input::placeholder {
+  color: #aaa;
+}
+
+.error-text {
+  display: block;
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #5dd3d3, #7ee8e8);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Nunito', sans-serif;
+  margin-top: 10px;
+}
+
+.register-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(93, 211, 211, 0.4);
+}
+
+.register-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 24px;
+  color: #666;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #ff6b9d;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+  color: #5dd3d3;
+}

@@ -1,0 +1,47 @@
+/* Test Results Page */
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff5f7 0%, #e0f7f7 100%);
+  padding: 40px 24px;
+}
+
+.page-header {
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+
+.page-header h1 {
+  font-size: 36px;
+  font-weight: 800;
+  color: #ff6b9d;
+  margin: 0;
+}
+
+.results-message {
+  max-width: 500px;
+  margin: 100px auto;
+  text-align: center;
+  background: white;
+  border-radius: 24px;
+  padding: 60px 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.message-icon {
+  font-size: 80px;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.results-message h2 {
+  color: #5dd3d3;
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+}
+
+.results-message p {
+  color: #666;
+  font-size: 16px;
+  margin: 0;
+}

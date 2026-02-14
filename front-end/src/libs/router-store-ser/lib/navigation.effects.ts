@@ -1,12 +1,9 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Action } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RouterStateSerializer } from '@ngrx/router-store';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/observable/empty';
+import { EMPTY, Observable } from 'rxjs';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { tassign2 } from './tassign2';
 
 import { ACTION_NAVIGATION_GO, NavigationGoAction } from './navigation.actions';
@@ -18,9 +15,9 @@ import { RouterStateSerializer as CustomRouterStateSerializer } from './router-s
 @Injectable()
 export class NavigationEffects
 {
-    @Effect()
-    public effect$: Observable<Action> = this.actions$.ofType<NavigationGoAction>(ACTION_NAVIGATION_GO)
-        .mergeMap(action =>
+    navigate$ = createEffect(() => this.actions$.pipe(
+        ofType<NavigationGoAction>(ACTION_NAVIGATION_GO),
+        mergeMap(action =>
         {
             let route: ActivatedRoute = null;
             if (action.payload.relativeRouteId)
@@ -39,8 +36,9 @@ export class NavigationEffects
                 action.payload.commands,
                 tassign2(action.payload.extras, { relativeTo: null }));
 
-            return Observable.empty();
-        });
+            return EMPTY;
+        })
+    ), { dispatch: false });
 
     constructor(
         protected actions$: Actions,

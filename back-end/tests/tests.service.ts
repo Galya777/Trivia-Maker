@@ -120,4 +120,51 @@ export class TestsService {
     });
     return result;
   }
+
+  async getLeaderboard() {
+    // Get top results from all tests, sorted by score
+    const results = await this.prisma.testResults.findMany({
+      orderBy: {
+        score: 'desc',
+      },
+      take: 50, // Top 50 results
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        test: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    return results;
+  }
+
+  async getUserStats(userId: string) {
+    // Get user's overall statistics
+    const results = await this.prisma.testResults.findMany({
+      where: { userId },
+    });
+    
+    const totalTests = results.length;
+    const averageScore = totalTests > 0 
+      ? results.reduce((acc, r) => acc + r.score, 0) / totalTests 
+      : 0;
+    const bestScore = totalTests > 0 
+      ? Math.max(...results.map(r => r.score)) 
+      : 0;
+    
+    return {
+      totalTests,
+      averageScore: Math.round(averageScore * 100) / 100,
+      bestScore,
+    };
+  }
 }

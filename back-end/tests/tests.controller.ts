@@ -42,4 +42,14 @@ export class TestsController {
   async submitResult(@Param('id') id: string, @Body() data, @User() user) {
     return this.testsService.submitResult(id, data, user);
   }
+
+  @Get('leaderboard/global')
+  async getLeaderboard() {
+    return this.testsService.getLeaderboard();
+  }
+
+  @Get('stats/:userId')
+  async getUserStats(@Param('userId') userId: string) {
+    return this.testsService.getUserStats(userId);
+  }
 }

@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 export class HttpService {
   constructor(private http: HttpClient) {}
 
+  private apiUrl = 'http://localhost:3000';
+
   httpOptions = {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
@@ -15,36 +17,41 @@ export class HttpService {
 
   // Method to login in the application
   login(data: any) {
-    return this.http.post<any>(`${environment.production}/api/login`, data);
+    return this.http.post<any>(`${this.apiUrl}/api/login`, data);
   }
 
   // Method to register in the application
   register(data: any) {
-    return this.http.post<any>(`${environment.production}/api/users`, data);
+    return this.http.post<any>(`${this.apiUrl}/api/users`, data);
   }
 
   // Method to get the user profile
   profile(): Observable<any> {
     return this.http.get<any>(
-      `${environment.production}/api/users/profile`,
+      `${this.apiUrl}/api/users/profile`,
       this.httpOptions
     );
   }
 
   // Method to get all tests
   getTests(): Observable<any> {
-    return this.http.get<any>(`${environment.production}/api/tests`, this.httpOptions);
+    return this.http.get<any>(`${this.apiUrl}/api/tests`, this.httpOptions);
   }
 
   // Method to get test by id
   getTest(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.production}/api/tests/${id}`, this.httpOptions);
+    return this.http.get<any>(`${this.apiUrl}/api/tests/${id}`, this.httpOptions);
+  }
+
+  // Method to get tests by user id
+  getTestsByUserId(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/users/${userId}/tests`, this.httpOptions);
   }
 
   // Method to create test
   createTest(data: any): Observable<any> {
     return this.http.post<any>(
-      `${environment.production}/api/tests`,
+      `${this.apiUrl}/api/tests`,
       data,
       this.httpOptions
     );
@@ -53,7 +60,7 @@ export class HttpService {
   // Method to update test
   updateTest(id: string, data: any): Observable<any> {
     return this.http.put<any>(
-      `${environment.production}/api/tests/${id}`,
+      `${this.apiUrl}/api/tests/${id}`,
       data,
       this.httpOptions
     );
@@ -62,33 +69,43 @@ export class HttpService {
   // Method to delete test
   deleteTest(id: string): Observable<any> {
     return this.http.delete<any>(
-      `${environment.production}/api/tests/${id}`,
+      `${this.apiUrl}/api/tests/${id}`,
       this.httpOptions
     );
   }
 
   // Method to get test results
   getTestResults(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.production}/api/tests/${id}/results`, this.httpOptions);
+    return this.http.get<any>(`${this.apiUrl}/api/tests/${id}/results`, this.httpOptions);
   }
 
   // Method to submit test result
   submitResult(id: string, data: any): Observable<any> {
     return this.http.post<any>(
-      `${environment.production}/api/tests/${id}/results`,
+      `${this.apiUrl}/api/tests/${id}/results`,
       data,
       this.httpOptions
     );
   }
 
+  // Get global leaderboard
+  getLeaderboard(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/tests/leaderboard/global`, this.httpOptions);
+  }
+
+  // Get user statistics
+  getUserStats(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/tests/stats/${userId}`, this.httpOptions);
+  }
+
   // Competitions
   getCompetitions(): Observable<any> {
-    return this.http.get<any>(`${environment.production}/api/competitions`, this.httpOptions);
+    return this.http.get<any>(`${this.apiUrl}/api/competitions`, this.httpOptions);
   }
 
   createCompetition(data: any): Observable<any> {
     return this.http.post<any>(
-      `${environment.production}/api/competitions`,
+      `${this.apiUrl}/api/competitions`,
       data,
       this.httpOptions
     );
@@ -96,7 +113,7 @@ export class HttpService {
 
   joinCompetition(id: string, token: string): Observable<any> {
     return this.http.post<any>(
-      `${environment.production}/api/competitions/${id}/join`,
+      `${this.apiUrl}/api/competitions/${id}/join`,
       { token },
       this.httpOptions
     );
@@ -104,12 +121,12 @@ export class HttpService {
 
   // Users (for admin)
   getUsers(): Observable<any> {
-    return this.http.get<any>(`${environment.production}/api/users`, this.httpOptions);
+    return this.http.get<any>(`${this.apiUrl}/api/users`, this.httpOptions);
   }
 
   updateUser(id: string, data: any): Observable<any> {
     return this.http.put<any>(
-      `${environment.production}/api/users/${id}`,
+      `${this.apiUrl}/api/users/${id}`,
       data,
       this.httpOptions
     );
@@ -117,7 +134,7 @@ export class HttpService {
 
   deleteUser(id: string): Observable<any> {
     return this.http.delete<any>(
-      `${environment.production}/api/users/${id}`,
+      `${this.apiUrl}/api/users/${id}`,
       this.httpOptions
     );
   }

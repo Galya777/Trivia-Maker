@@ -21,7 +21,7 @@ export class RouterOutEffects
 {
     public effect$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(ROUTER_NAVIGATION),
+            ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_NAVIGATION),
             withLatestFrom(this.store$.select(state => state.exam)),
             filter(([action, exam]) => {
                 const node = this.routerStateSerializer.findNodeById(action.payload.routerState.root, [resultRouteId, questionRouteId]);
@@ -38,22 +38,5 @@ export class RouterOutEffects
         @Inject(RouterStateSerializer)
         protected routerStateSerializer: CustomRouterStateSerializer,
     )
-    {
-        const exam$: Store<ExamState> = this.store$.select(state => state.exam);
-
-        this.effect$ = this.actions$.ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_NAVIGATION)
-            .withLatestFrom(
-                exam$,
-                (action, exam) =>
-                {
-                    const node = this.routerStateSerializer.findNodeById(action.payload.routerState.root, [resultRouteId, questionRouteId]);
-                    if (!node && exam.status !== ExamStatus.OFF)
-                        return action;
-
-                    return null;
-                },
-            )
-            .filter(action => action != null)
-            .map(action => new ExamStatusAction({ status: ExamStatus.OFF }));
-    }
+    {}
 }

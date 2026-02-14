@@ -20,7 +20,7 @@ import { State, MODULE_STORE_TOKEN } from '../state/state';
 export class RouterResultEffects
 {
     public effect$ = createEffect(() => {
-        const exam$: Store<ExamState> = this.store$.select(state => state.exam);
+        const exam$: Observable<ExamState> = this.store$.select(state => state.exam);
 
         return this.actions$.pipe(
             ofType<RouterNavigationAction<RouterStateSer>>(ROUTER_NAVIGATION),

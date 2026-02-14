@@ -1,1 +1,134 @@
-<p>competitions works!</p>
+<div class="page-container">
+  <div class="page-header">
+    <h1>🏆 Състезания</h1>
+    <p class="subtitle">Вижте класацията на най-добрите играчи</p>
+  </div>
+
+  <!-- Not logged in - show demo message -->
+  <div *ngIf="!isLoggedIn" class="login-prompt">
+    <div class="prompt-card">
+      <span class="prompt-icon">🔐</span>
+      <h2>Вижте класацията</h2>
+      <p>За да видите цялата класация и да се състезавате с други играчи, моля влезте или се регистрирайте.</p>
+      <div class="prompt-buttons">
+        <a routerLink="/login" class="btn-login">🔑 Вход</a>
+        <a routerLink="/register" class="btn-register">📝 Регистрация</a>
+      </div>
+    </div>
+
+    <!-- Show sample leaderboard preview -->
+    <div class="leaderboard-preview">
+      <h3>👑 Топ играчи</h3>
+      <div class="preview-list">
+        <div class="preview-item gold">
+          <span class="rank">🥇</span>
+          <span class="name">Играч 1</span>
+          <span class="score">1000 т.</span>
+        </div>
+        <div class="preview-item silver">
+          <span class="rank">🥈</span>
+          <span class="name">Играч 2</span>
+          <span class="score">950 т.</span>
+        </div>
+        <div class="preview-item bronze">
+          <span class="rank">🥉</span>
+          <span class="name">Играч 3</span>
+          <span class="score">900 т.</span>
+        </div>
+      </div>
+      <p class="preview-note">Влезте, за да видите цялата класация!</p>
+    </div>
+  </div>
+
+  <!-- Logged in - show full leaderboard -->
+  <div *ngIf="isLoggedIn" class="logged-in-content">
+    <!-- User Stats -->
+    <div *ngIf="userStats" class="user-stats-card">
+      <h2>📊 Вашата статистика</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-value">{{ userStats.totalTests }}</span>
+          <span class="stat-label">Изplayedени тестове</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ userStats.averageScore }}</span>
+          <span class="stat-label">Среден резултат</span>
+        </div>
+        <div class="stat-item highlight">
+          <span class="stat-value">{{ userStats.bestScore }}</span>
+          <span class="stat-label">Най-добър резултат</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard-section">
+      <h2>🌍 Глобална класация</h2>
+      
+      <div *ngIf="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Зареждане на класацията...</p>
+      </div>
+
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!loading && leaderboard.length === 0" class="empty-state">
+        <span class="empty-icon">📝</span>
+        <p>Все още няма резултати. Бъдете първият!</p>
+        <a routerLink="/tests" class="btn-start">🚀 Започнете тест</a>
+      </div>
+
+      <div *ngIf="!loading && leaderboard.length > 0" class="leaderboard-table">
+        <div class="table-header">
+          <span class="col-rank">#</span>
+          <span class="col-user">Играч</span>
+          <span class="col-test">Тест</span>
+          <span class="col-score">Резултат</span>
+          <span class="col-date">Дата</span>
+        </div>
+        
+        <div 
+          *ngFor="let entry of leaderboard; let i = index" 
+          class="table-row"
+          [class.current-user]="isCurrentUser(entry.user.id)"
+          [class]="getRankClass(i)"
+        >
+          <span class="col-rank">{{ getRankEmoji(i) }}</span>
+          <span class="col-user">
+            <span class="user-name">{{ entry.user.name }}</span>
+            <span class="user-email">{{ entry.user.email }}</span>
+          </span>
+          <span class="col-test">{{ entry.test.name }}</span>
+          <span class="col-score">
+            <span class="score-badge">{{ entry.score }} т.</span>
+          </span>
+          <span class="col-date">{{ formatDate(entry.completed_at) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <h2>🎮 Бързи действия</h2>
+    <div class="actions-grid">
+      <a routerLink="/tests" class="action-card">
+        <span class="action-icon">📚</span>
+        <h3>Всички тестове</h3>
+        <p>Разгледайте наличните тестове</p>
+      </a>
+      <a routerLink="/start" class="action-card">
+        <span class="action-icon">➕</span>
+        <h3>Създай тест</h3>
+        <p>Създайте свой собствен тест</p>
+      </a>
+      <a routerLink="/personal" class="action-card">
+        <span class="action-icon">👤</span>
+        <h3>Моят профил</h3>
+        <p>Вижте вашите резултати</p>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,11 +1,11 @@
-import { OpaqueToken, Inject, Optional } from '@angular/core';
+import { InjectionToken, Inject, Optional, Injectable } from '@angular/core';
 import { RouterStateSnapshot, Params, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { RouterStateSerializer as OriginalRouterStateSerializer } from '@ngrx/router-store';
 
 /**
  * An injectable string to use as the property name for storing uid in route objects' data object.
  */
-export const DataPropertyToken = new OpaqueToken('DataPropertyToken');
+export const DataPropertyToken = new InjectionToken<string>('DataPropertyToken');
 
 /**
  * The interface for objects in payload.routerState for the navigation actions.
@@ -61,6 +61,7 @@ export class RouterNodeSer
  * The serializer to feed to '@ngrx/router-store' by providing it to the global injector.
  * The class can be extended to serialize more data from the router states.
  */
+@Injectable()
 export class RouterStateSerializer implements OriginalRouterStateSerializer<RouterStateSer>
 {
     /**

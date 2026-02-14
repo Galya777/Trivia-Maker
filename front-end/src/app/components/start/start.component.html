@@ -1,17 +1,158 @@
-<div class="row">
-    <div class="col">
-        <h1>Online Exams</h1>
+<div class="page-container">
+  <div class="page-header">
+    <h1>📝 Създай тест</h1>
+    <p class="subtitle">Създайте свой собствен тест с въпроси и отговори</p>
+  </div>
+
+  <!-- Not logged in - show demo -->
+  <div *ngIf="!isLoggedIn" class="create-test-card">
+    <div class="demo-notice">
+      <span class="notice-icon">🔐</span>
+      <p>За да създавате тестове, моля <a routerLink="/login">влезте</a> или <a routerLink="/register">се регистрирайте</a></p>
     </div>
-</div>
-<div class="row">
-    <div class="col">
-        <ul class="list-group">
-            <li class="list-group-item">
-                <a [routerLink]="['../exam']">Color Mixing</a>
-            </li>
-            <li class="list-group-item disabled">Color Separation and Printing</li>
-            <li class="list-group-item disabled">Color Management</li>
-            <li class="list-group-item disabled">Color Effects</li>
-        </ul>
+
+    <div class="form-preview">
+      <h2>Как ще изглежда вашият тест:</h2>
+      
+      <div class="question-preview">
+        <div class="question-number">Въпрос 1</div>
+        <div class="question-text">Пример: Кое е най-голямото животно в света?</div>
+        <div class="options">
+          <div class="option">🟡 Слон</div>
+          <div class="option correct">🔵 Кит</div>
+          <div class="option">🟢 Жираф</div>
+          <div class="option">🔴 Мечка</div>
+        </div>
+      </div>
     </div>
+
+    <div class="action-buttons">
+      <button class="btn-register" routerLink="/register">
+        📝 Регистрирай се безплатно
+      </button>
+    </div>
+  </div>
+
+  <!-- Logged in - show form -->
+  <div *ngIf="isLoggedIn" class="create-test-card">
+    <form [formGroup]="testForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Success/Error Messages -->
+      <div *ngIf="successMessage" class="alert success">
+        ✅ {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert error">
+        ⚠️ {{ errorMessage }}
+      </div>
+
+      <!-- Test Info -->
+      <div class="form-section">
+        <h2>📋 Информация за теста</h2>
+        
+        <div class="form-group">
+          <label>Име на теста *</label>
+          <input type="text" formControlName="name" placeholder="Въведете име на теста">
+        </div>
+
+        <div class="form-group">
+          <label>Описание</label>
+          <textarea formControlName="description" placeholder="Кратко описание на теста" rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Категория *</label>
+            <select formControlName="category">
+              <option value="">Изберете категория</option>
+              <option value="general">Общи познания</option>
+              <option value="science">Наука</option>
+              <option value="history">История</option>
+              <option value="geography">География</option>
+              <option value="math">Математика</option>
+              <option value="language">Език</option>
+              <option value="other">Друго</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Време (минути) *</label>
+            <input type="number" formControlName="duration" min="1" max="120">
+          </div>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" formControlName="isPublic" id="isPublic">
+          <label for="isPublic">Публичен тест (видим за всички)</label>
+        </div>
+      </div>
+
+      <!-- Questions -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>❓ Въпроси</h2>
+          <button type="button" class="btn-add" (click)="addQuestion()">➕ Добави въпрос</button>
+        </div>
+
+        <div formArrayName="questions">
+          <ng-container *ngFor="let q of questions.controls; let idx = index">
+            <div [formGroupName]="idx" class="question-card">
+              <div class="question-header">
+                <span>Въпрос {{ idx + 1 }}</span>
+                <button type="button" class="btn-remove" (click)="removeQuestion(idx)" *ngIf="questions.length > 1">
+                  🗑️ Премахни
+                </button>
+              </div>
+
+              <div class="form-group">
+                <label>Текст на въпроса *</label>
+                <input type="text" formControlName="text" placeholder="Въведете въпрос">
+              </div>
+
+              <div class="answers-section">
+                <label>Отговори (изберете верния)</label>
+                <div formArrayName="answers">
+                  <ng-container *ngFor="let a of getAnswersControls(idx); let j = index">
+                    <div class="answer-row">
+                      <input type="radio" [formControlName]="'correctIndex'" [value]="j">
+                      <input type="text" [formControlName]="j" placeholder="Отговор {{ j + 1 }}">
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" [disabled]="isSubmitting || testForm.invalid">
+        {{ isSubmitting ? 'Създаване...' : '💾 Създай тест' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="features-section">
+    <h2>🔧 Функции</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <span class="feature-icon">📚</span>
+        <h3>Много категории</h3>
+        <p>Създавайте тестове по различни предмети</p>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">⏱️</span>
+        <h3>Таймер</h3>
+        <p>Добавете ограничение във времето</p>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">📊</span>
+        <h3>Резултати</h3>
+        <p>Вижте статистика и резултати</p>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🏆</span>
+        <h3>Състезания</h3>
+        <p>Състезавайте се с приятели</p>
+      </div>
+    </div>
+  </div>
 </div>

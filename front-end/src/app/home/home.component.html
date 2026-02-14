@@ -1,70 +1,51 @@
-<link rel="stylesheet" href="home.component.css">
-<!-- Toolbar -->
-<header>
-  <div class="toolbar" role="banner">
-   
-   
-    <span>Trivia Maker</span>
-    <a href="#"><i class="fa fa-search"></i></a>
-   <button class="split4">Explore Tests</button>
-  <button class="split3" id="register" routerLink="/register">Sign In</button> 
-  
-  <button class="split2" routerLink="/login">Log In</button>  
-
-  <input class="split1" type="text" placeholder="Search..">
-  
-  <p class="split">Menu</p>
-
-</div>
-</header>
-
-<div class="menu-container">
-  
-  <input type="checkbox" id="openmenu" class="hamburger-checkbox">
-  
-  <div class="hamburger-icon">
-    <label for="openmenu" id="hamburger-label">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>    
-  </div>
-
-    <div class="menu-pane">
+<div class="home-container">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <span class="logo">🎯 Trivia Maker</span>
       
-      <nav>
-        <ul class="menu-links">
-          
-          <li><a href="###" routerLink="/register">Play tests</a></li>
-          <li><a href="###" routerLink="/createTest">Create test</a></li>
-          <li><a href="###" routerLink="/register">Competitions</a></li>
-          <li><a href="###" routerLink="/register">Info</a></li>
-          <li><a href="###" routerLink="/register">Premium options</a></li>
-        </ul>    
+      <nav class="nav-buttons">
+        <a routerLink="/tests" class="btn btn-secondary">🔍 Разгледай тестове</a>
+        <a routerLink="/register" class="btn btn-accent">📝 Регистрация</a>
+        <a routerLink="/login" class="btn btn-primary">🚀 Вход</a>
       </nav>
-      
     </div>
-<body style="background-image: url(site-background.jpg);">
-    <div class="content" role="main">
-  <!-- Highlight Card -->
-  <div class="card highlight-card card-small" >
-    <main class="container mx-auto my-10" >
-      <div className="App">
-    
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="hero">
+      <h1>Добре дошли в Trivia Maker! 🎉</h1>
+      <p class="subtitle">Създавайте и решавайте забавни тестове</p>
+      
+      <div class="hero-buttons">
+        <a routerLink="/register" class="btn btn-large btn-primary">Започни сега</a>
+        <a routerLink="/tests" class="btn btn-large btn-outline">Разгледай тестове</a>
       </div>
-      <router-outlet></router-outlet>
-    </main>
-  </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feature-card">
+        <span class="feature-icon">📚</span>
+        <h3>Създавай тестове</h3>
+        <p>Създавай свои собствени тестове лесно и бързо</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏆</span>
+        <h3>Състезавай се</h3>
+        <p>Участвай в състезания и печели награди</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">👨‍👩‍👧</span>
+        <h3>За деца</h3>
+        <p>Перфектно за деца и ученици</p>
+      </div>
+    </div>
+  </main>
+
   <!-- Footer -->
-  <footer > 
-    <p class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-      © 2022 <a href="/" class="hover:underline">Trivia Maker</a> by Galya Dodova
-    </p>
- </footer>
+  <footer class="footer">
+    <p>© 2022 Trivia Maker от Galya Dodova</p>
+  </footer>
 </div>
-</body>
-
-
-
-

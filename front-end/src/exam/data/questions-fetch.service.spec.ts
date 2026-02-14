@@ -1,4 +1,5 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import { catchError } from 'rxjs/operators';
 import { matchObservable } from 'match-observable';
 
 import { QuestionsFetchService } from './questions-fetch.service';
@@ -32,8 +33,8 @@ describe('Exam/Data/' + QuestionsFetchService.name, () =>
                 new AsyncDataSer<Question[]>(questions, false),
             ];
             const questions$ = service.fetchQuestions(exam);
-            let matchResult: string;
-            matchObservable(questions$.catch(failOnObsError), expectedValues, true, false, deepEqual)
+            let matchResult: string | null = null;
+            matchObservable(questions$.pipe(catchError(failOnObsError)), expectedValues, true, false, deepEqual)
                 .then(() => matchResult = null, result => matchResult = result);
 
             tick(1000);

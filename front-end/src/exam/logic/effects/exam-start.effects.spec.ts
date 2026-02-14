@@ -2,10 +2,8 @@
 import { StoreModule, Store, Action } from '@ngrx/store';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { hot, cold } from 'jasmine-marbles';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/concat';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
+import { Observable, of, concat, interval } from 'rxjs';
+import { map, take, startWith, catchError, tap, delay } from 'rxjs/operators';
 import { NavigationGoAction } from 'router-store-ser';
 import { matchObservable } from 'match-observable';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -42,7 +40,7 @@ describe('Exam/Logic/' + ExamStartEffects.name, () =>
         actions = hot('a', { a: new ExamStartAction() });
         const expected = cold('', {});
 
-        expect(effects.effect$.catch(failOnObsError)).toBeObservable(expected);
+        expect(effects.effect$.pipe(catchError(failOnObsError))).toBeObservable(expected);
     });
 
     it('should emit timer actions until expired', () => fakeAsync(() =>
@@ -51,10 +49,13 @@ describe('Exam/Logic/' + ExamStartEffects.name, () =>
         examTimerService.getTimer.and.returnValue(getTimerMock(examDuration));
         questionsFetchService.fetchQuestions.and.returnValue(fetchQuestionsMock(questions));
 
-        actions = Observable.of(new ExamStartAction());
-        let matchResult: string;
+        actions = of(new ExamStartAction());
+        let matchResult: string | null = null;
         matchObservable<Action>(
-            effects.effect$.catch(failOnObsError).do(a => store$.dispatch(a)),
+            effects.effect$.pipe(
+                catchError(failOnObsError),
+                tap(a => store$.dispatch(a))
+            ),
             buildExpected(examDuration),
             true,
             false,
@@ -72,13 +73,16 @@ describe('Exam/Logic/' + ExamStartEffects.name, () =>
         examTimerService.getTimer.and.returnValue(getTimerMock(examDuration));
         questionsFetchService.fetchQuestions.and.returnValue(fetchQuestionsMock(questions));
 
-        actions = Observable.concat(
-            Observable.of(new ExamStartAction()),
-            Observable.interval(2.5 * 1000).take(1).map(() => new ExamStatusAction({ status: ExamStatus.ENDED })),
+        actions = concat(
+            of(new ExamStartAction()),
+            interval(2.5 * 1000).pipe(take(1), map(() => new ExamStatusAction({ status: ExamStatus.ENDED }))),
         );
-        let matchResult: string;
+        let matchResult: string | null = null;
         matchObservable<Action>(
-            effects.effect$.catch(failOnObsError).do(a => store$.dispatch(a)),
+            effects.effect$.pipe(
+                catchError(failOnObsError),
+                tap(a => store$.dispatch(a))
+            ),
             buildExpected(examDuration, examDuration - 2),
             true,
             false,
@@ -102,7 +106,7 @@ describe('Exam/Logic/' + ExamStartEffects.name, () =>
             ],
             providers: [
                 ExamStartEffects,
-                provideMockActions(() => actions.do(a => store$.dispatch(a))),
+                provideMockActions(() => actions.pipe(tap(a => store$.dispatch(a)))),
                 { provide: MODULE_STORE_TOKEN, useExisting: Store },
                 {
                     provide: ExamTimerService,
@@ -115,10 +119,10 @@ describe('Exam/Logic/' + ExamStartEffects.name, () =>
             ],
         });
 
-        effects = TestBed.get(ExamStartEffects);
-        store$ = TestBed.get(Store);
-        examTimerService = TestBed.get(ExamTimerService);
-        questionsFetchService = TestBed.get(QuestionsFetchService);
+        effects = TestBed.inject(ExamStartEffects);
+        store$ = TestBed.inject(Store);
+        examTimerService = TestBed.inject(ExamTimerService) as jasmine.SpyObj<ExamTimerService>;
+        questionsFetchService = TestBed.inject(QuestionsFetchService) as jasmine.SpyObj<QuestionsFetchService>;
     }
 
     /**
@@ -174,10 +178,14 @@ describe('Exam/Logic/' + ExamStartEffects.name, () =>
  */
 function getTimerMock(duration: number)
 {
-    return Observable.interval(1000).map(i => duration - i - 1).take(duration).startWith(duration);
+    return interval(1000).pipe(
+        map(i => duration - i - 1),
+        take(duration),
+        startWith(duration)
+    );
 }
 
 function fetchQuestionsMock(questions: Question[]): Observable<AsyncDataSer<Question[]>>
 {
-    return Observable.of(new AsyncDataSer<Question[]>(questions));
+    return of(new AsyncDataSer<Question[]>(questions));
 }

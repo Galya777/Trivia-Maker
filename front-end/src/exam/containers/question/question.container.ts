@@ -1,5 +1,6 @@
 import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
 import { State, MODULE_STORE_TOKEN } from '../../logic/state/state';
 import { CommonContainer } from '../../utils/common-container';
 import { AsyncDataSer } from '../../../utils/asyncData';
@@ -46,15 +47,15 @@ export class QuestionContainer extends CommonContainer
 
     constructor(
         @Inject(MODULE_STORE_TOKEN)
-        protected store$: Store<State>,
-        protected changeDetectorRef: ChangeDetectorRef,
+        protected override store$: Store<State>,
+        protected override changeDetectorRef: ChangeDetectorRef,
     )
     {
         super(store$, changeDetectorRef);
 
         store$
             .select(s => s.questions)
-            .takeUntil(this.componentDestroyed$)
+            .pipe(takeUntil(this.componentDestroyed$))
             .subscribe(
                     (questions) =>
                     {
@@ -76,7 +77,7 @@ export class QuestionContainer extends CommonContainer
 
         this.store$
             .select(state => state.exam)
-            .takeUntil(this.componentDestroyed$)
+            .pipe(takeUntil(this.componentDestroyed$))
             .subscribe({
                 next:
                     (exam) =>

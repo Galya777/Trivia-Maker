@@ -6,3 +6,9 @@
     </div>
     <router-outlet></router-outlet>
 </ng-container>
+<ng-container *ngIf="!examInfoA || examInfoA.loading">
+    <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Зареждане...</p>
+    </div>
+</ng-container>

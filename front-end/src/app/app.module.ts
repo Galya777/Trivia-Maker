@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,18 +16,19 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
 import { AboutComponent } from './about/about.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { LogicModule } from './logic/logic.module';
 @NgModule({
     declarations: [
-        AppComponent,
-        HomeComponent,
-        LoginComponent,
-        RegisterComponent
+        AppComponent
     ],
     bootstrap: [AppComponent],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         AppRoutingModule,
         ReactiveFormsModule,
+        LogicModule,
+        HomeComponent,
         TestsComponent,
         TestResultsComponent,
         PersonalComponent,

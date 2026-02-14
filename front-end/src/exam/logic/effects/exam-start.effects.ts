@@ -2,7 +2,7 @@
 import { Action, Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of, concat } from 'rxjs';
-import { filter, mergeMap, withLatestFrom, takeUntil, takeLast, skip, map } from 'rxjs/operators';
+import { filter, mergeMap, withLatestFrom, takeUntil, takeLast, skip, map, take } from 'rxjs/operators';
 import { NavigationGoAction } from 'router-store-ser';
 
 import { ExamStatusAction, ExamEndAction, ExamTimeAction, ExamStartAction } from '../actions/exam.actions';
@@ -37,7 +37,7 @@ export class ExamStartEffects
 {
     public effect$ = createEffect(() => {
         const instance: ExamStartEffects = this;
-        const exam$: Store<ExamState> = this.store$.select(state => state.exam);
+        const exam$: Observable<ExamState> = this.store$.select(state => state.exam);
 
         return this.actions$.pipe(
             ofType(ExamStartAction.type),
@@ -45,7 +45,7 @@ export class ExamStartEffects
             filter(exam => exam != null && AsyncDataSer.hasData(exam.data, false)),
             mergeMap((state: ExamState) => {
                 return concat(
-                    questionsFetchService.fetchQuestions(state.data.data).pipe(
+                    this.questionsFetchService.fetchQuestions(state.data.data).pipe(
                         map(questions => new QuestionsDataAction({ data: questions }))
                     ),
                     of(new QuestionsCurrentAction({ num: 1 })),
@@ -70,13 +70,13 @@ export class ExamStartEffects
             );
 
             const timer$ = instance.examTimerService.getTimer(state.data.data.duration).pipe(
-                takeUntil(exam$.pipe(filter(s => s.status !== ExamStatus.RUNNING))),
+                takeUntil(exam$.pipe(filter((s: ExamState) => s.status !== ExamStatus.RUNNING))),
                 map(num => new ExamTimeAction({ time: num }))
             );
 
             const end$ = exam$.pipe( // this works because concat() only subscribes end$ after timer$ completes
                 take(1),
-                filter(s => s.status === ExamStatus.RUNNING), // timer ended to the end without interruption
+                filter((s: ExamState) => s.status === ExamStatus.RUNNING), // timer ended to the end without interruption
                 mergeMap(_ => of(
                     new ExamEndAction({ status: ExamStatus.TIME_ENDED }),
                     new NavigationGoAction({

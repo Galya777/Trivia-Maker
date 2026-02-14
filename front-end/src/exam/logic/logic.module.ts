@@ -1,6 +1,7 @@
 ﻿import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, ActionReducerMap, Action, Store, createFeatureSelector } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { reducer as examReducer } from './reducers/exam.reducer';
 import { reducer as questionsReducer } from './reducers/questions.reducer';
@@ -24,7 +25,7 @@ export const reducersMap: ActionReducerMap<State, Action> = {
  * See more on [[MODULE_STORE_TOKEN]].
  * @param store
  */
-export function featureSelector(store$: Store<any>): Store<State>
+export function featureSelector(store$: Store<any>): Observable<State>
 {
     return store$.select<State>(createFeatureSelector<State>(featureName));
 }

@@ -1,67 +1,69 @@
-<section class="register">
-  <form
-    class="max-w-md mx-auto"
-    [formGroup]="registerForm"
-    (ngSubmit)="register(registerForm.value)"
-  >
-    <h5 class="text-xl mb-6 font-medium text-gray-900 dark:text-white">
-      Register
-    </h5>
-    <div class="mb-6">
-      <label
-        for="name"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Your name</label
-      >
-      <input
-        formControlName="name"
-        type="text"
-        id="name"
-        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-        placeholder="John Doe"
-        required
-      />
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h2>📝 Регистрация</h2>
+      <p>Създайте своя профил</p>
     </div>
-    <div class="mb-6">
-      <label
-        for="email"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Your email</label
-      >
-      <input
-        formControlName="email"
-        type="email"
-        id="email"
-        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-        placeholder="name@flowbite.com"
-        required
-      />
-    </div>
-    <div class="mb-6">
-      <label
-        for="password"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Your password</label
-      >
-      <input
-        formControlName="password"
-        type="password"
-        id="password"
-        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-        required
-      />
-    </div>
-    <div class="flex items-center">
-      <button
-        type="submit"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg mr-5 text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        Create new account
+
+    <form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="name">👤 Име</label>
+        <input
+          formControlName="name"
+          type="text"
+          id="name"
+          placeholder="Вашето име"
+          [class.error]="controls.name.touched && controls.name.errors"
+        />
+        <span *ngIf="controls.name.touched && controls.name.errors?.['required']" class="error-text">
+          Името е задължително
+        </span>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">📧 Имейл</label>
+        <input
+          formControlName="email"
+          type="email"
+          id="email"
+          placeholder="your@email.com"
+          [class.error]="controls.email.touched && controls.email.errors"
+        />
+        <span *ngIf="controls.email.touched && controls.email.errors?.['required']" class="error-text">
+          Имейлът е задължителен
+        </span>
+        <span *ngIf="controls.email.touched && controls.email.errors?.['email']" class="error-text">
+          Въведете валиден имейл
+        </span>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">🔑 Парола</label>
+        <input
+          formControlName="password"
+          type="password"
+          id="password"
+          placeholder="••••••••"
+          [class.error]="controls.password.touched && controls.password.errors"
+        />
+        <span *ngIf="controls.password.touched && controls.password.errors?.['required']" class="error-text">
+          Паролата е задължителна
+        </span>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="registerForm.invalid" class="register-btn">
+        ✨ Създай профил
       </button>
-      <span class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500"
-        >Already registered?
-        <a class="text-blue-700" routerLink="/login">Login</a></span
-      >
-    </div>
-  </form>
-</section>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        <span>Вече имате профил? </span>
+        <a routerLink="/login">Влезте тук!</a>
+      </div>
+    </form>
+  </div>
+</div>

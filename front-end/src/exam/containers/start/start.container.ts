@@ -22,8 +22,8 @@ export class StartContainer extends CommonContainer
 
     constructor(
         @Inject(MODULE_STORE_TOKEN)
-        protected store$: Store<State>,
-        protected changeDetectorRef: ChangeDetectorRef,
+        protected override store$: Store<State>,
+        protected override changeDetectorRef: ChangeDetectorRef,
     )
     {
         super(store$, changeDetectorRef);

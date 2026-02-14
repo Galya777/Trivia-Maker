@@ -11,7 +11,7 @@ import { CompetitionsComponent } from './competitions/competitions.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
 import { AboutComponent } from './about/about.component';
-import { startRouteId } from 'src/exam/exam-routing.module';
+import { startRouteId } from '../exam/exam-routing.module';
 export const examRouterCommands = ['exam'];
 
 const routes: Routes = [

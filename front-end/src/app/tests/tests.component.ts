@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import { HttpService } from '../http/http.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tests',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './tests.component.html',
   styleUrl: './tests.component.css'
 })
