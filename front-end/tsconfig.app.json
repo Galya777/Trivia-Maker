@@ -8,7 +8,9 @@
     "target": "es2015",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/app/*"]
+      "@/*": ["src/app/*"],
+      "router-store-ser": ["src/libs/router-store-ser/index.ts"],
+      "match-observable": ["src/libs/match-observable/index.ts"]
     },
     "typeRoots": [
       "node_modules/@types"
